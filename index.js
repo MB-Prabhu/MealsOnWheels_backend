@@ -14,12 +14,9 @@ app.use(cors({
 }))  
 app.use(express.json())
 
-// app.get("/", (req, res)=>{
-//     res.send("hello")
-// })
+app.use('/api', foodRouter)
+app.use("/images", express.static('uploads'))
 
-app.use('/', foodRouter)
-  
 let PORT = process.env.PORT || 4000 
 connectDB().then(()=>{
     app.listen(PORT, ()=>{

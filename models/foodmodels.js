@@ -21,6 +21,6 @@ let FoodSchema = mongoose.Schema({
     timestamps: true
 })
 
-const FoodModels = mongoose.model("FoodSchema", FoodSchema)
+const FoodModels =mongoose.model.FoodSchema || mongoose.model("FoodSchema", FoodSchema)
 
 export default FoodModels;
