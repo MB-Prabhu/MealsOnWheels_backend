@@ -34,7 +34,7 @@ const foodCreate =  async (req, res)=>{
 const listFood = async (req,res)=>{
     try{
         const foods = await FoodModel.find()
-
+        console.log(foods)
         if(!foods.length){
             throw new Error("No Food items are there to display")
         }
@@ -44,7 +44,7 @@ const listFood = async (req,res)=>{
     }
     catch(err){
         console.log(err)
-        res.status(400).json({msg: "food not created", ok: false}) 
+        res.status(400).json({msg: err.message, ok: false}) 
     }
 }
 
@@ -59,19 +59,20 @@ const removeFoodItems = async(req, res)=>{
             throw new Error("item not available")
         } 
 
-        fs.unlink(`uploads/${isExists.image}`, (err, res)=>{
-                if(err) throw new Error("error while removing the image", err)
-                console.log("image delted succesffuly")
+        fs.unlink(`uploads/${isExists.image}`, ()=>{
+            // console.log(err)
+            //     if(err) throw Error("error while removing the image"+ err)
+            //     console.log("image delted succesffuly")
         })
 
         const deletedItem = await FoodModel.findByIdAndDelete(id)
 
-        res.status(200).json({msg: "Food item listed successfully", ok: true, data: deletedItem})
+        res.status(200).json({msg: "Food item deleted successfully", ok: true, data: deletedItem})
 
     }
     catch(err){
         console.log(err)
-        res.status(400).json({msg: "food not created", ok: false}) 
+        res.status(400).json({msg: err.message, ok: false}) 
     }
 }
   
