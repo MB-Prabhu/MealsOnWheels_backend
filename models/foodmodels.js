@@ -4,7 +4,7 @@ let FoodSchema = mongoose.Schema({
     name: {
         type: String,
     },
-    descritpion: {
+    description: {
         type: String
     },
     price:{
