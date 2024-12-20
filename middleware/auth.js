@@ -12,6 +12,9 @@ const authMiddleware = async (req, res, next)=>{
         try{
             let {_id} = jwt.verify(token ,process.env.JWT_SECREAT_KEY)
             let user = await UserModel.findById(_id)
+            if(!user){
+                throw new Error("user not available")
+            }
             req.user = user
             next()
         }
