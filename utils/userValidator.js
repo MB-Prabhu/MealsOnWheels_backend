@@ -2,7 +2,7 @@ import validator from "validator"
 import UserModel from "../models/usermodel.js"
 
 
-const userRegisterValidator = async (req, res)=>{
+const userRegisterValidator = async (req)=>{
         const {Name, email, mobile, password, confirmPassword, address} = req.body
 
         if(!Name || !email || !mobile || !password || !confirmPassword){
@@ -33,7 +33,7 @@ const userRegisterValidator = async (req, res)=>{
         }
 }
 
-const userLoginValidator = async (req, res)=>{
+const userLoginValidator = async (req)=>{
     const {email, password} = req.body
     
     if(!email || !password){

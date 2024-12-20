@@ -20,8 +20,9 @@ const registerUser = async (req,res)=>{
             confirmPassword: hashedPassword,
             address
         })
-        
-        res.status(201).json({  ok: true, msg:"User Successfully Registered", data: user})
+
+        let token = await jwt.sign({_id: user._id},process.env.JWT_SECREAT_KEY )
+        res.status(201).json({  ok: true, msg:"User Successfully Registered", data: user, token})
     }
     catch(err){
         console.log(err)
@@ -32,6 +33,7 @@ const registerUser = async (req,res)=>{
 const loginUser = async (req,res)=>{
     try{
         await userLoginValidator(req)
+        const {email, password} = req.body
 
         let isExists = await UserModel.findOne({email: email})
             
@@ -45,7 +47,9 @@ const loginUser = async (req,res)=>{
             throw new Error("Invalid credentials")
         }
 
-        let token = await jwt.sign({_id: isExists._id},process.env.JWT_SECREAT_KEY, process.env.JWT_TOKEN_EXPIRY )
+        // let token = await jwt.sign({_id: isExists._id},process.env.JWT_SECREAT_KEY, {expiresIn: process.env.JWT_TOKEN_EXPIRY} )
+        let token = await jwt.sign({_id: isExists._id},process.env.JWT_SECREAT_KEY )
+        res.status(200).json({msg:"login successfull", data: token})
     }
     catch(err){
         console.log(err)
