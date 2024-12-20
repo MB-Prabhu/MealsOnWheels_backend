@@ -4,6 +4,7 @@ import cors from "cors"
 import connectDB from "./config/connectDB.js"
 import foodRouter from "./routes/foodroutes.js"
 import userRouter from "./routes/userrouter.js"
+import cartRouter from "./routes/cartroutes.js"
 
 dotenv.config()
 const app = express()
@@ -16,6 +17,9 @@ app.use(express.json())
 app.use('/api', foodRouter)
 app.use("/images", express.static('uploads'))
 app.use("/user", userRouter)
+app.use("/user/cart", cartRouter)
+
+
 
 let PORT = process.env.PORT || 4000 
 connectDB().then(()=>{
