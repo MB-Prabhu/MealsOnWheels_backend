@@ -29,7 +29,7 @@ const userRegisterValidator = async (req, res)=>{
         }
 
         if(password !== confirmPassword){
-            throw new Error("Enter a strong Password")
+            throw new Error("Password and Confirm Password doesn't match")
         }
 }
 

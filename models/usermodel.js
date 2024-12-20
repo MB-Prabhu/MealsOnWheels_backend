@@ -28,6 +28,6 @@ const UserSchema = mongoose.Schema({
     minimize: false
 })
 
-const UserModel = mongoose.models.userSchema || mongoose.model("userSchema", UserSchema)
+const UserModel = mongoose.models.userModel || mongoose.model("userModel", UserSchema)
 
 export default UserModel;
