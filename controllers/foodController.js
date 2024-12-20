@@ -4,7 +4,15 @@ import fs from "fs"
 const foodCreate =  async (req, res)=>{
     try{
         let {name, price, description, category} = req.body
-        console.log("im runnning")
+
+        if(!name || !description || !category){
+            throw new Error("Must Fill all the fields")
+        }
+
+        if (!req.file) {
+             throw new Error("Image file is Required")
+          }
+
         let imageFileName = `${req.file.filename}`
         
         let createFood = await FoodModel.create({
@@ -17,8 +25,8 @@ const foodCreate =  async (req, res)=>{
         res.status(201).json({msg: "created successfully", ok: true, data: createFood})
     }
     catch(err){
-        console.log(err)
-        res.status(400).json({msg: "food not created", ok: false})
+        console.log(err.message)
+        res.status(400).json({msg: err.message, ok: false})
 
     }
 }
