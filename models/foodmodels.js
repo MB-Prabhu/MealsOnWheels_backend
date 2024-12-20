@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 let FoodSchema = mongoose.Schema({
-    Name: {
+    name: {
         type: String,
     },
     descritpion: {
