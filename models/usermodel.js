@@ -24,9 +24,15 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    cartItem:{
+        type: Object,
+        default: {}
+    }
 }, {
     minimize: false
 })
+
+UserSchema.indexes({email: 1})
 
 const UserModel = mongoose.models.userModel || mongoose.model("userModel", UserSchema)
 
