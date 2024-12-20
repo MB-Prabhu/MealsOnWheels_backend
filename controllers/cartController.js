@@ -25,7 +25,20 @@ const addToCart = async (req, res)=>{
 
 const removeFromCart = async (req, res)=>{
     try{
+            let user = req.user
+
+            let cartItem = await user.cartItem
             
+            if(cartItem[req.body.itemid]>1){
+                cartItem[req.body.itemid] -= 1
+            }
+            else{
+                throw new Error("cant be removed already attained minimum count")
+            }
+
+            await UserModel.findByIdAndUpdate(user._id, {cartItem})
+            res.status(200).json({msg:"item from cart has been removed", ok:true})
+
     }
     catch(err){
         console.log(err)
@@ -35,7 +48,14 @@ const removeFromCart = async (req, res)=>{
 
 const getCartItems = async (req, res)=>{
     try{
+            let user = req.user
 
+            if(!user.cartItem){
+                throw new Error("no cart items")
+            }
+
+            let cartItem = await user.cartItem
+            res.status(200).json({msg:"item from cart has been removed", ok:true, data:cartItem})
     }
     catch(err){
         console.log(err)
