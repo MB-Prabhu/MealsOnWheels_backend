@@ -8,19 +8,18 @@ import cartRouter from "./routes/cartroutes.js"
 import orderRouter from "./routes/orderroutes.js"
 
 dotenv.config()
+
 const app = express()
  
 app.use(cors({
     origin: "*"
 }))  
 app.use(express.json())
-
 app.use('/api', foodRouter)
 app.use("/images", express.static('uploads'))
 app.use("/user", userRouter)
 app.use("/user/cart", cartRouter)
 app.use("/user/order", orderRouter)
-
 
 
 let PORT = process.env.PORT || 4000 
