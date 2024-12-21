@@ -27,13 +27,12 @@ const foodCreate =  async (req, res)=>{
     catch(err){
         console.log(err.message)
         res.status(400).json({msg: err.message, ok: false})
-
     }
 }
 
 const listFood = async (req,res)=>{
     try{
-        const foods = await FoodModel.find()
+        const foods = await FoodModel.find({})
         console.log(foods)
         if(!foods.length){
             throw new Error("No Food items are there to display")
@@ -47,7 +46,6 @@ const listFood = async (req,res)=>{
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
-
 
 const removeFoodItems = async(req, res)=>{
     try{
@@ -75,7 +73,7 @@ const removeFoodItems = async(req, res)=>{
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
-  
+    
 export {
     foodCreate, 
     listFood,
