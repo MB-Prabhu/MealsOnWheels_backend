@@ -14,11 +14,11 @@ const placeOrder = async (req,res)=>{
         let user = req.user
         const newOrder = await orderModel.create({
             userId:user._id,
-            items:req.body.items,
-            amount:req.body.amount,
-            address:req.body.address, 
+            items:req.body.orderDetails.items,
+            amount:req.body.orderDetails.amount,
+            address:req.body.orderDetails.address, 
         })
-        // onsole.log("New Order Created:", newOrder);  
+        // console.log("New Order Created:   ", newOrder);  
         // console.log("newOrder", newOrder)
         await UserModel.findByIdAndUpdate(user._id, {cartItem:{}})
            
@@ -83,7 +83,25 @@ const verifyOrder = async (req, res)=>{
     }
 }
 
+const userOrders = async (req, res)=>{
+    try{
+        let user = req.user
+
+    let userOrders = await orderModel.find({userId: user._id})
+
+    if(userOrders.length===0){
+        throw new Error("No orders yet")
+    }
+        res.status(200).json({msg:"orders fetched successfully", data: userOrders})
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({msg: err.message, ok: false})  
+    }
+}
+
 export {
     placeOrder,
-    verifyOrder
+    verifyOrder,
+    userOrders
 }

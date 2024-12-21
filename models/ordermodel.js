@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { now } from "mongoose";
 
 const orderSchema = mongoose.Schema({
     userId: {
@@ -14,13 +14,16 @@ const orderSchema = mongoose.Schema({
         type: Object
     },
     status: {
-        type: String
+        type: String,
+        default: "Food processing"
     },
     date: {
-        type: Date
+        type: Date,
+        default: Date.now()
     },
     payment: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
 })
 
