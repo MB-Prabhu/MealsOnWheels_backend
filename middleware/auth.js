@@ -4,7 +4,9 @@ import UserModel from "../models/usermodel.js"
 const authMiddleware = async (req, res, next)=>{
     try{
         let {token} = req.headers
-
+    //    console.log(req.headers) 
+        // console.log("below token")
+        console.log(token)
         if(!token){
             throw new Error("Not authorized, Please login")
         }
