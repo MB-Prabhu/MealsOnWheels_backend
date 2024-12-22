@@ -85,9 +85,23 @@ const listOrders = async (req, res)=>{
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
+
+const updateOrders = async(req, res)=>{
+    try{
+        let {_id, foodStatus} = req.body
+
+       let data = await orderModel.findByIdAndUpdate(_id, {status: foodStatus}, {returnDocument: "after"})
+       res.status(200).json({msg:"status updated successfully", ok: true, data})
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({msg: err.message, ok: false}) 
+    }
+}
 export {
     foodCreate, 
     listFood,
     removeFoodItems,
-    listOrders
+    listOrders,
+    updateOrders
 }
