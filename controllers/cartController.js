@@ -13,9 +13,9 @@ const addToCart = async (req, res)=>{
         else{
             cartItem[req.body.itemid] += 1
         }
-
-        await UserModel.findByIdAndUpdate(user._id,{cartItem})
-        res.status(200).json({msg:"cart item added",ok:true })
+        
+        let updatedUser = await UserModel.findByIdAndUpdate(user._id,{cartItem}, {returnDocument: "after"})
+        res.status(200).json({msg:"cart item added",ok:true, data: updatedUser })
     }
     catch(err){
         console.log(err)
@@ -41,8 +41,8 @@ const removeFromCart = async (req, res)=>{
                 throw new Error("cant be removed already attained minimum count")
             }
 
-            await UserModel.findByIdAndUpdate(user._id, {cartItem})
-            res.status(200).json({msg:"item from cart has been removed", ok:true})
+            let updatedUser = await UserModel.findByIdAndUpdate(user._id, {cartItem}, {returnDocument: "after"})
+            res.status(200).json({msg:"item from cart has been removed", ok:true, data: updatedUser})
 
     } 
     catch(err){
@@ -55,6 +55,8 @@ const getCartItems = async (req, res)=>{
     try{
             let user = req.user
 
+            console.log("get cartitems called")
+            console.log(user)
             if(!user.cartItem){
                 throw new Error("no cart items")
             }
