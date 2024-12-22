@@ -1,5 +1,6 @@
 import FoodModel from "../models/foodmodels.js";
 import fs from "fs"
+import orderModel from "../models/ordermodel.js";
 
 const foodCreate =  async (req, res)=>{
     try{
@@ -73,9 +74,20 @@ const removeFoodItems = async(req, res)=>{
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
-    
+const listOrders = async (req, res)=>{
+    try{
+        const data = await orderModel.find();
+
+        res.status(200).json({msg:"orders fetched successfully",ok: true, data})
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({msg: err.message, ok: false}) 
+    }
+}
 export {
     foodCreate, 
     listFood,
-    removeFoodItems
+    removeFoodItems,
+    listOrders
 }
