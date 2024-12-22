@@ -3,14 +3,14 @@ import UserModel from "../models/usermodel.js"
 
 const authMiddleware = async (req, res, next)=>{
     try{
+        console.log(req.headers)
         let {token} = req.headers
-    //    console.log(req.headers) 
-        // console.log("below token")
-        console.log(token)
+
+        // console.log(token, isToken)
         if(!token){
             throw new Error("Not authorized, Please login")
         }
-
+ 
             let {_id} = jwt.verify(token ,process.env.JWT_SECREAT_KEY)
             let user = await UserModel.findById(_id)
             if(!user){
