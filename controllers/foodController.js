@@ -1,6 +1,8 @@
 import FoodModel from "../models/foodmodels.js";
 import fs from "fs"
 import orderModel from "../models/ordermodel.js";
+import adminValidator from "../utils/adminValidator.js";
+import  jwt  from 'jsonwebtoken';
 
 const foodCreate =  async (req, res)=>{
     try{
@@ -33,8 +35,21 @@ const foodCreate =  async (req, res)=>{
 
 const listFood = async (req,res)=>{
     try{
-        const foods = await FoodModel.find({})
-        console.log(foods)
+
+        let page = req.query.page || 1
+        let limit = req.query.limit || 10
+        let skip = (page-1) * limit
+    
+        let totalDocuments = await FoodModel.countDocuments();
+
+        let totalPages = Math.ceil(totalDocuments / limit);
+
+        if (page > totalPages) {
+            throw new Error(`Not enough data available. Total pages: ${totalPages}`);
+        }
+
+        const foods = await FoodModel.find({}).skip(skip).limit(limit)
+       
         if(!foods.length){
             throw new Error("No Food items are there to display")
         }
@@ -76,7 +91,19 @@ const removeFoodItems = async(req, res)=>{
 }
 const listOrders = async (req, res)=>{
     try{
-        const data = await orderModel.find();
+        let page = req.query.page || 1
+        let limit = req.query.limit || 10
+        let skip = (page-1) * limit
+    
+        let totalDocuments = await orderModel.countDocuments();
+
+        let totalPages = Math.ceil(totalDocuments / limit);
+
+        if (page > totalPages) {
+            throw new Error(`Not enough data available. Total pages: ${totalPages}`);
+        }
+
+        const data = await orderModel.find().skip(skip).limit(limit)
 
         res.status(200).json({msg:"orders fetched successfully",ok: true, data})
     }
@@ -98,10 +125,35 @@ const updateOrders = async(req, res)=>{
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
+
+const adminLogin = async (req, res)=>{
+    try{
+        const {email, password} = req.body
+        await adminValidator(req)
+
+        let isCorrectPassword = password===process.env.ADMIN_PASSWORD
+        let isCorrectEmail = password===process.env.ADMIN_EMAIL
+
+       if(!isCorrectPassword && !isCorrectEmail){
+                   throw new Error("Invalid credentials")
+               }
+               
+               // let token = await jwt.sign({_id: isExists._id},process.env.JWT_SECREAT_KEY, {expiresIn: process.env.JWT_TOKEN_EXPIRY} )
+               let token = await jwt.sign({email: email},process.env.JWT_SECREAT_KEY )
+               res.status(200).json({msg:"login successfull", ok:true, token})
+           
+
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({msg: err.message, ok: false}) 
+    }
+}
 export {
     foodCreate, 
     listFood,
     removeFoodItems,
     listOrders,
-    updateOrders
+    updateOrders,
+    adminLogin
 }

@@ -79,23 +79,33 @@ const searchFood = async (req, res)=>{
         let limit = req.query.limit || 10
         let skip = (page-1) * limit
     
-        let totalDocuments = await FoodModel.countDocuments();
+    //     let totalDocuments = await FoodModel.countDocuments();
 
-        let totalPages = Math.ceil(totalDocuments / limit);
+    //     let totalPages = Math.ceil(totalDocuments / limit);
 
-        if (page > totalPages) {
-            throw new Error(`Not enough data available. Total pages: ${totalPages}`);
-        }
+    //     if (page > totalPages) {
+    //         throw new Error(`Not enough data available. Total pages: ${totalPages}`);
+    //     }
 
-        let regex = new RegExp(search, "i")
+    //     let regex = new RegExp(search, "i")
 
+    
+    let regex = new RegExp(search, "i");
+    
+    // Count documents based on the search query
+    let totalDocuments = await FoodModel.countDocuments({ name: { $regex: regex } });
+    let totalPages = Math.ceil(totalDocuments / limit);
+    
+    if (page > totalPages && totalPages > 0) {
+        throw new Error(`Not enough data available. Total pages: ${totalPages}`);
+    }
        let searchedFoods = await FoodModel.find({name: {$regex: regex}}).skip(skip).limit(limit)
 
        if(!searchedFoods.length){
         throw new Error("No Food Available")
     }
 
-       res.status(200).json({msg:"food fetched successfully", data:searchedFoods})
+       res.status(200).json({msg:"food fetched successfully",ok:true, data:searchedFoods})
     }
     catch(err){
         console.log(err)

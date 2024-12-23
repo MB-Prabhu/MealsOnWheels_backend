@@ -46,7 +46,7 @@ const loginUser = async (req,res)=>{
         if(!isMatching){
             throw new Error("Invalid credentials")
         }
-
+        
         // let token = await jwt.sign({_id: isExists._id},process.env.JWT_SECREAT_KEY, {expiresIn: process.env.JWT_TOKEN_EXPIRY} )
         let token = await jwt.sign({_id: isExists._id},process.env.JWT_SECREAT_KEY )
         res.status(200).json({msg:"login successfull", ok:true, token})
