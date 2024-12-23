@@ -85,7 +85,7 @@ const verifyOrder = async (req, res)=>{
 
 const userOrders = async (req, res)=>{
     try{
-        let user = req.user
+    let user = req.user
 
     let userOrders = await orderModel.find({userId: user._id})
 
