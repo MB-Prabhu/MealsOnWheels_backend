@@ -1,5 +1,5 @@
 import express  from 'express';
-import { foodCreate, listFood, listOrders, updateOrders, removeFoodItems, adminLogin } from '../controllers/foodController.js';
+import { foodCreate, listFood, listOrders, updateOrders,categoryFood, removeFoodItems, adminLogin } from '../controllers/foodController.js';
 import upload from '../utils/ImageUpload.js';
 import { adminAuthMiddleware } from '../middleware/auth.js';
 
@@ -7,6 +7,7 @@ const foodRouter = express.Router()
 
 foodRouter.post('/createfood',adminAuthMiddleware,upload.single("image"), foodCreate)
 foodRouter.get('/listfood', listFood)
+foodRouter.get('/categoryfood', categoryFood)
 foodRouter.delete('/removefood/:id', removeFoodItems)
 foodRouter.get('/listorders', listOrders)
 foodRouter.patch('/updateorderstatus', updateOrders)

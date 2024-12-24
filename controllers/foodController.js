@@ -3,6 +3,7 @@ import fs from "fs"
 import orderModel from "../models/ordermodel.js";
 import adminValidator from "../utils/adminValidator.js";
 import  jwt  from 'jsonwebtoken';
+import { log } from "console";
 
 const foodCreate =  async (req, res)=>{
     try{
@@ -38,11 +39,9 @@ const listFood = async (req,res)=>{
         let page = req.query.page || 1
         let limit = req.query.limit || 10
         let skip = (page-1) * limit
-    
         let totalDocuments = await FoodModel.countDocuments();
-
+            
         let totalPages = Math.ceil(totalDocuments / limit);
-
         if (page > totalPages) {
             throw new Error(`Not enough data available. Total pages: ${totalPages}`);
         }
@@ -55,6 +54,37 @@ const listFood = async (req,res)=>{
 
         res.status(200).json({msg: "Food items listed successfully", ok: true, data: foods})
         
+    }
+    catch(err){
+        res.status(400).json({msg: err.message, ok: false}) 
+    }
+}
+
+
+const categoryFood = async (req, res)=>{
+    try{
+
+        let page = req.query.page || 1
+        let limit = req.query.limit || 10
+        let skip = (page-1) * limit
+        let category = req.query.category
+        let regex = new RegExp(category, "i");
+    
+        // Count documents based on the search query
+        let totalDocuments = await FoodModel.countDocuments({ category: { $regex: regex } });
+        let totalPages = Math.ceil(totalDocuments / limit);
+        
+        if (page > totalPages && totalPages > 0) {
+            throw new Error(`Not enough data available. Total pages: ${totalPages}`);
+        }
+           let categorizedFoods = await FoodModel.find({category: {$regex: regex}}).skip(skip).limit(limit)
+    
+           if(!categorizedFoods.length){
+            throw new Error("No Food Available")
+        }
+    
+           res.status(200).json({msg:"food fetched successfully",ok:true, data:categorizedFoods})
+            
     }
     catch(err){
         res.status(400).json({msg: err.message, ok: false}) 
@@ -144,6 +174,7 @@ const adminLogin = async (req, res)=>{
 export {
     foodCreate, 
     listFood,
+    categoryFood,
     removeFoodItems,
     listOrders,
     updateOrders,
