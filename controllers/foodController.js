@@ -3,7 +3,6 @@ import fs from "fs"
 import orderModel from "../models/ordermodel.js";
 import adminValidator from "../utils/adminValidator.js";
 import  jwt  from 'jsonwebtoken';
-import { log } from "console";
 
 const foodCreate =  async (req, res)=>{
     try{
@@ -70,7 +69,6 @@ const categoryFood = async (req, res)=>{
         let category = req.query.category
         let regex = new RegExp(category, "i");
     
-        // Count documents based on the search query
         let totalDocuments = await FoodModel.countDocuments({ category: { $regex: regex } });
         let totalPages = Math.ceil(totalDocuments / limit);
         

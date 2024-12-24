@@ -24,6 +24,10 @@ const userRegisterValidator = async (req)=>{
             throw new Error("Enter correct Mobile Format")
         }
 
+        if (mobile.length !== 10) {
+            throw new Error("Mobile number must be exactly 10 digits");
+        }
+
         if(!validator.isStrongPassword(password)){
             throw new Error("Enter a strong Password")
         }
