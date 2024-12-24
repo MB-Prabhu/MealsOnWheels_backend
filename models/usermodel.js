@@ -43,6 +43,13 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.indexes({email: 1})
 
+UserSchema.pre('save', function(next) {
+    if (this.password !== this.confirmPassword) {
+        throw new Error("Password and Confirm Password must match");
+    }
+    next();
+});
+
 const UserModel = mongoose.models.userModel || mongoose.model("userModel", UserSchema)
 
 export default UserModel;
