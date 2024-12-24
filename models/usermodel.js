@@ -2,11 +2,14 @@ import mongoose  from 'mongoose';
 
 const UserSchema = mongoose.Schema({
     Name: {
-        type: String
+        type: String,
+        required: true,
+        trim: true,
     },
     mobile:{
         type: String,
-        required: true
+        required: true,
+        minLength: [10, "mobile number should 10 digits long"]
     },
     email:{
         type: String,
@@ -14,15 +17,21 @@ const UserSchema = mongoose.Schema({
     },
     address:{
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxLength: [350, "address should not exceed more than 350 characters"]
     },
     password:{
         type: String,
-        required: true
+        required: true,
+        minLength: [8, "password must be atleast 8 characters long"],
+
     },
     confirmPassword:{
         type: String,
-        required: true
+        required: true,
+        minLength: [8, "password must be atleast 8 characters long"],
+
     },
     cartItem:{
         type: Object,

@@ -139,7 +139,11 @@ const updateOrders = async(req, res)=>{
     try{
         let {_id, foodStatus} = req.body
 
-       let data = await orderModel.findByIdAndUpdate(_id, {status: foodStatus}, {returnDocument: "after"})
+        if(!foodStatus){
+            throw new Error("Food status should not be empty")
+        }
+
+       let data = await orderModel.findByIdAndUpdate(_id, {status: foodStatus}, {returnDocument: "after", runValidators: true})
        res.status(200).json({msg:"status updated successfully", ok: true, data})
     }
     catch(err){

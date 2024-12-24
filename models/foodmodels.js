@@ -9,7 +9,7 @@ let FoodSchema = mongoose.Schema({
     },
     description: {
         type: String,
-        trime: true,
+        trim: true,
         maxLength: [300, "Description cannot exceed 300 characers"]
     },
     price:{

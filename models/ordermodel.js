@@ -5,17 +5,27 @@ const orderSchema = mongoose.Schema({
         type: String
     },
     items: {
-        type: Array
+        type: Array,
+        required: true,
     },
     amount: {
-        type: Number
+        type: Number, 
+        required: true,
+        min: [0, "amount cannot be negative"]
     },
     address: {
-        type: Object
+        type: Object,
+        required: true,
     },
     status: {
         type: String,
-        default: "Food processing"
+        default: "Food processing",
+        required: true,
+        trim: true,
+        enum: {
+            values: ["Food processing", "Out For delivery", "Delivered"],
+            message: "status can be either Food processing or Out For delivery or Delivered"
+        }
     },
     date: {
         type: Date,
@@ -23,7 +33,8 @@ const orderSchema = mongoose.Schema({
     },
     payment: {
         type: Boolean,
-        default: false
+        default: false,
+        required: true
     },
 })
 
