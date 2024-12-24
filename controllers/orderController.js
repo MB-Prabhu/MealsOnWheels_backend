@@ -7,19 +7,32 @@ const stripe = new Stripe("sk_test_51QYRHLEC0Q46zCHqJ10Y3JerPnf032dJMbmBrTNEeUW3
 
 
 const placeOrder = async (req,res)=>{
-    // console.log(stripe)
-    const frontendUrl = "http://localhost:5173"
+    const frontendUrl = process.env.FRONTEND_URL
+
+
 
     try{
         let user = req.user
+
+        if(!req.body.orderDetails.address.mobile || !req.body.orderDetails.address.Name || !req.body.orderDetails.address.email || !req.body.orderDetails.address.address || !req.body.orderDetails.address.pincode || !req.body.orderDetails.address.landmark){
+            throw new Error("every fields must be filled")
+        }
+
+        if(req.body.orderDetails.address.mobile.length!==10){
+            throw new Error("mobile should be only 10 digits")
+        }
+
+        if(!req.body.orderDetails.address.email.includes("@")){
+            throw new Error("Enter valid email format")
+        }
+
         const newOrder = await orderModel.create({
             userId:user._id,
             items:req.body.orderDetails.items,
             amount:req.body.orderDetails.amount,
             address:req.body.orderDetails.address, 
         })
-        // console.log("New Order Created:   ", newOrder);  
-        // console.log("newOrder", newOrder)
+    
         await UserModel.findByIdAndUpdate(user._id, {cartItem:{}})
            
         // line_items are necessary for strip payments, we are creating this with user passed items
@@ -47,7 +60,6 @@ const placeOrder = async (req,res)=>{
             quantity:1
         })
 
-        // console.log("line_items", line_items)
 
         // creatig success and failure url
         const session = await stripe.checkout.sessions.create({
@@ -56,14 +68,14 @@ const placeOrder = async (req,res)=>{
             success_url: `${frontendUrl}/verify?success=true&orderId=${newOrder._id}`,
             cancel_url: `${frontendUrl}/verify?success=false&orderId=${newOrder._id}`,
         })
-        console.log("session", session.url)
-        res.status(201).json({msg:"", ok:true, data: session.url})
+        res.status(201).json({msg:"order placed successfully", ok:true, data: session.url})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false})
     }
 }
+
+
 
 const verifyOrder = async (req, res)=>{
     const {orderId, ok} = req.body
@@ -78,7 +90,6 @@ const verifyOrder = async (req, res)=>{
         }
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false})
     }
 }
@@ -92,10 +103,9 @@ const userOrders = async (req, res)=>{
     if(userOrders.length===0){
         throw new Error("No orders yet")
     }
-        res.status(200).json({msg:"orders fetched successfully", data: userOrders})
+        res.status(200).json({msg:"orders fetched successfully",ok:true, data: userOrders})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false})  
     }
 }
@@ -103,5 +113,5 @@ const userOrders = async (req, res)=>{
 export {
     placeOrder,
     verifyOrder,
-    userOrders
+    userOrders,
 }

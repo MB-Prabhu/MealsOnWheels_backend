@@ -3,10 +3,8 @@ import UserModel from "../models/usermodel.js"
 
 const authMiddleware = async (req, res, next)=>{
     try{
-        console.log(req.headers)
         let {token} = req.headers
 
-        // console.log(token, isToken)
         if(!token){
             throw new Error("Not authorized, Please login")
         }
@@ -26,10 +24,8 @@ const authMiddleware = async (req, res, next)=>{
 
 const adminAuthMiddleware = async(req, res, next)=>{
     try{
-        console.log(req.headers)
         let {token} = req.headers
 
-        // console.log(token, isToken)
         if(!token){
             throw new Error("Not authorized, Please login")
         }

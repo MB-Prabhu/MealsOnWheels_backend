@@ -11,7 +11,6 @@ const registerUser = async (req,res)=>{
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        console.log(hashedPassword)
         let user = await UserModel.create({
             Name, 
             email, 
@@ -25,7 +24,6 @@ const registerUser = async (req,res)=>{
         res.status(201).json({  ok: true, msg:"User Successfully Registered", data: user, token})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -52,7 +50,6 @@ const loginUser = async (req,res)=>{
         res.status(200).json({msg:"login successfull", ok:true, token})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }

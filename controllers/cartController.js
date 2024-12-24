@@ -18,7 +18,6 @@ const addToCart = async (req, res)=>{
         res.status(200).json({msg:"cart item added",ok:true, data: updatedUser })
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -32,10 +31,8 @@ const removeFromCart = async (req, res)=>{
             if(cartItem[req.body.itemid]>0){
                 cartItem[req.body.itemid] -= 1
                 if(cartItem[req.body.itemid]===0){
-                    console.log(cartItem[req.body.itemid])
                     delete cartItem[req.body.itemid]
                 }
-                console.log(cartItem)
             }
             else{
                 throw new Error("cant be removed already attained minimum count")
@@ -46,7 +43,6 @@ const removeFromCart = async (req, res)=>{
 
     } 
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -55,8 +51,6 @@ const getCartItems = async (req, res)=>{
     try{
             let user = req.user
 
-            console.log("get cartitems called")
-            console.log(user)
             if(!user.cartItem){
                 throw new Error("no cart items")
             }
@@ -65,7 +59,6 @@ const getCartItems = async (req, res)=>{
             res.status(200).json({msg:"item from cart has been removed", ok:true, data:cartItem})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -108,7 +101,23 @@ const searchFood = async (req, res)=>{
        res.status(200).json({msg:"food fetched successfully",ok:true, data:searchedFoods})
     }
     catch(err){
-        console.log(err)
+        res.status(400).json({msg: err.message, ok: false}) 
+    }
+}
+
+const getIndiCartItems = async (req, res)=>{
+    try{
+        let user = req.user
+
+        let isAvailable = await UserModel.findById(user._id)
+       
+        if(!isAvailable){
+            throw new Error("No user found")
+        }
+
+        res.status(200).json({msg:"cart items fetched successfully", ok: true, data : isAvailable.cartItem})
+    }
+    catch(err){
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -118,4 +127,5 @@ export {
     removeFromCart,
     getCartItems,
     searchFood,
+    getIndiCartItems
 }

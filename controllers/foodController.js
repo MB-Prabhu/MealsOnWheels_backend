@@ -28,7 +28,6 @@ const foodCreate =  async (req, res)=>{
         res.status(201).json({msg: "created successfully", ok: true, data: createFood})
     }
     catch(err){
-        console.log(err.message)
         res.status(400).json({msg: err.message, ok: false})
     }
 }
@@ -58,7 +57,6 @@ const listFood = async (req,res)=>{
         
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -74,9 +72,7 @@ const removeFoodItems = async(req, res)=>{
         } 
 
         fs.unlink(`uploads/${isExists.image}`, ()=>{
-            // console.log(err)
             //     if(err) throw Error("error while removing the image"+ err)
-            //     console.log("image delted succesffuly")
         })
 
         const deletedItem = await FoodModel.findByIdAndDelete(id)
@@ -85,7 +81,6 @@ const removeFoodItems = async(req, res)=>{
 
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -108,7 +103,6 @@ const listOrders = async (req, res)=>{
         res.status(200).json({msg:"orders fetched successfully",ok: true, data})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -121,7 +115,6 @@ const updateOrders = async(req, res)=>{
        res.status(200).json({msg:"status updated successfully", ok: true, data})
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
@@ -145,7 +138,6 @@ const adminLogin = async (req, res)=>{
 
     }
     catch(err){
-        console.log(err)
         res.status(400).json({msg: err.message, ok: false}) 
     }
 }
