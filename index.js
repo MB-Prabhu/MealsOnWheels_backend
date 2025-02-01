@@ -13,6 +13,7 @@ const app = express()
  
 app.use(cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173"
+    // origin: "http://localhost:5173"
 }))  
 
 app.use(express.json())
@@ -22,18 +23,6 @@ app.use("/user", userRouter)
 app.use("/user/cart", cartRouter)
 app.use("/user/order", orderRouter)
 
-// app.use((err, req, res, next) => {
-//     console.error("Unhandled error:", err); // Log unhandled errors
-//     res.status(500).json({ error: true, message: "An unexpected error occurred: " + err.message, ok: false, success: false });
-//   });
-
-//   // Serve static files from the React build folder
-// app.use(express.static(path.join(__dirname, "../client/build")));
-
-// // Catch-all route for React
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-// });
 
 let PORT = process.env.PORT || 4000 
 
